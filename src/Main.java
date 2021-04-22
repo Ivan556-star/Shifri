@@ -363,7 +363,7 @@ public class Main {
             tmpText += MyCopy(Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2))) + 1,
                     text.length()
                     , text);
-            text = tmpText;
+            text = tmpText; // wadawd
 
             int indexTMP;
             for (var i: text.toCharArray()) {
