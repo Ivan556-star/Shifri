@@ -9,55 +9,40 @@ public class Main {
         do {
             System.out.print("Зашифровать(1)/расшифровать(0): ");
             int[] arrShifry = shuffleArray(new int[]{2, 3});
-            try {
-                int choiceUser = cin.nextInt();
-                String zaglushka = cin.nextLine();
-                if (choiceUser == 1) {
-                    System.out.println("Введите текст");
-                    String KEY;
-                    String str = cin.nextLine().replace(" ", "_");
-                    String[] text = Shifr_Vijenera(1, str, "");
-                    for (int j : arrShifry) {
-                        KEY = text[1];
-                        if (j == 2)
-                            text = Shifr_Transposition(1, text[0], KEY);
-                        else
-                            text = Shifr_Cezarya(1, text[0], KEY);
-                    }
+            int choiceUser = cin.nextInt();
+            String zaglushka = cin.nextLine();
+            if (choiceUser == 1) {
+                System.out.println("Введите текст");
+                String KEY;
+                String str = cin.nextLine().replace(" ", "_");
+                // String[] text = Shifr_Vijenera(1, str, "");
+                String[] text = Shifr_Cezarya(1, str, "");
 
-                    System.out.println("Зашифрованный текст:\n" + text[0] + "\nсекретный ключ: " + text[1]);
+                System.out.println("Зашифрованный текст:\n" + text[0] + "\nсекретный ключ: " + text[1]);
 
-
-                } else if (choiceUser == 0) {
-                    teleport:
-                    {
-                        System.out.println("Введите ключ: ");
-                        String KEY = cin.nextLine();
-                        for (int i = 0; i < KEY.length(); i++)
-                            if (!Character.isDigit(KEY.charAt(i))) {
-                                System.out.println("Ошибка, ключ указан не верно, попробуйте снова\n");
-                                break teleport;
-                            }
-
-                        System.out.println("Введите зашифрованный текст\n");
-                        String[] CipherText = {cin.nextLine(), KEY};
-                        for (int i = 0; i < 2; i++) {
-                            KEY = CipherText[1];
-                            int k = Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 1)));
-                            if (k == 2)
-                                CipherText = Shifr_Transposition(2, CipherText[0], KEY);
-                            else
-                                CipherText = Shifr_Cezarya(2, CipherText[0], KEY);
+                // 1) КЁД9ПЧХ{VBEIX]
+                // 2)
+                // 33
+            } else if (choiceUser == 0) {
+                teleport:
+                {
+                    System.out.println("Введите ключ: ");
+                    String KEY = cin.nextLine();
+                    for (int i = 0; i < KEY.length(); i++)
+                        if (!Character.isDigit(KEY.charAt(i))) {
+                            System.out.println("Ошибка, ключ указан не верно, попробуйте снова\n");
+                            break teleport;
                         }
 
-                        System.out.println("Расшифрованный текст:\n" + CipherText[0]);
-                    }
-                } else {
-                    System.out.println("Ошибка, введите 1 ли 0");
-                    String zaglushka2 = cin.nextLine();
+                    System.out.println("Введите зашифрованный текст");
+                    String[] CipherText = {cin.nextLine(), KEY};
+                    CipherText = Shifr_Cezarya(2, CipherText[0], KEY);
+                    //  CipherText = Shifr_Vijenera(2, CipherText[0], CipherText[1]);
+                    System.out.println("Расшифрованный текст:\n" + CipherText[0]);
                 }
-            } catch (Exception e) {
+            } else {
                 System.out.println("Ошибка, введите 1 ли 0");
+                String zaglushka2 = cin.nextLine();
             }
         } while (true);
     }
@@ -148,7 +133,7 @@ public class Main {
                     indexTMP = get_English_Alphabet().indexOf(String.valueOf(text.charAt(i)));
                     unswer += get_English_Alphabet().
                             charAt(Math.abs((indexTMP + get_English_Alphabet().
-                                        indexOf(String.valueOf(KEY.charAt(i)))) % get_English_Alphabet().length()));
+                                    indexOf(String.valueOf(KEY.charAt(i)))) % get_English_Alphabet().length()));
                 }
                 else if (get_Symbols().contains(String.valueOf(text.charAt(i)))){
                     indexTMP = get_Symbols().indexOf(String.valueOf(text.charAt(i)));
@@ -174,7 +159,7 @@ public class Main {
         else {
 
             String keyShifr = MyCopy(0, Integer.parseInt(KEY), text);
-
+            text= MyCopy(Integer.parseInt(KEY), text.length(), text);
             if (keyShifr.length() < text.length()) {
                 text = MyCopy(0, text.length() - 1, text);
             }
@@ -222,85 +207,90 @@ public class Main {
         }
     }
 
-    static private String[] Shifr_Transposition(int choiceSHIFR, String text, String KEY){
-        String unswer = "";
-        if (choiceSHIFR == 1){
-            int keyShifr = r.nextInt(((9 - 1) + 1) + 1) % text.length();
-            char[] arrCh = text.toCharArray();
-            for (int i = 0; i <= keyShifr; i++) {
-                char tmpCh = arrCh[i];
-                arrCh[i] = arrCh[(i + keyShifr) % text.length()];
-                arrCh[(i + keyShifr) % text.length()] = tmpCh;
-            }
-            for (char ch : arrCh) unswer += ch;
-
-            if (unswer.length() >= 9){
-                int indexKey = r.nextInt(10);
-                unswer = MyCopy(0, indexKey, unswer) + keyShifr + MyCopy(indexKey, unswer.length(), unswer);
-                KEY += indexKey + "2";
-            }
-            else {
-                int indexKey = r.nextInt(unswer.length());
-                unswer = MyCopy(0, indexKey, unswer) + keyShifr + MyCopy(indexKey, unswer.length(), unswer);
-                KEY += indexKey + "2";
-            }
-            return new String[]{unswer, KEY};
-        }
-
-        else {
-            int keyShifr;
-            if (text.length() < 1)
-                for (int i = 0; i < r.nextInt(((9 - 1) + 1)) + 1; i++)
-                    text += get_Symbols().charAt(r.nextInt(get_Symbols().length()));
-            if (Character.isDigit(text.charAt(Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2))) % text.length()))) {
-                keyShifr = Integer.parseInt(
-                        String.valueOf(
-                                text.charAt(
-                                        Integer.parseInt(
-                                                String.valueOf(
-                                                        KEY.charAt(
-                                                                KEY.length() - 2))) % text.length()
-                                )
-                        )
-                );
-            }
-            else {
-                keyShifr = (
-                        text.charAt(
-                                Integer.parseInt(
-                                        String.valueOf(
-                                                KEY.charAt(
-                                                        KEY.length() - 2))) % text.length()
-                        )
-                );
-            }
-
-            text = MyCopy(0,
-                    Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2)))
-                            + Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2))) + 1 , text);
-
-            if (text.length() < 1)
-                for (int i = 0; i < r.nextInt(9 - 1 + 1) + 1; i++)
-                    text += get_Symbols().charAt(r.nextInt(get_Symbols().length()));
-
-            char[] arrCh = text.toCharArray();
-            int i = keyShifr;
-
-            if (i >= arrCh.length)
-                i = keyShifr % arrCh.length; // чтобы не выйти за границы списка
-
-            while (i >= 0) {
-                char tmpCh = arrCh[i];
-                arrCh[i] = arrCh[(i + keyShifr) % text.length()];
-                arrCh[(i + keyShifr) % text.length()] = tmpCh;
-                i--;
-            }
-
-            unswer = MyCopy(0 , arrCh.length, String.valueOf(arrCh));
-            KEY = MyCopy(0, KEY.length() - 2, KEY);
-            return new String[]{unswer, KEY};
-        }
-     }
+//    static private String[] Shifr_Transposition(int choiceSHIFR, String text, String KEY){
+//        String unswer = "";
+//        if (choiceSHIFR == 1){
+//            int keyShifr = r.nextInt(((9 - 1) + 1) + 1) % text.length();
+//            char[] arrCh = text.toCharArray();
+//            for (int i = 0; i <= keyShifr; i++) {
+//                char tmpCh = arrCh[i];
+//                arrCh[i] = arrCh[(i + keyShifr) % text.length()];
+//                arrCh[(i + keyShifr) % text.length()] = tmpCh;
+//            }
+//            for (char ch : arrCh) unswer += ch;
+//
+//            if (unswer.length() >= 9){
+//                int indexKey = r.nextInt(10);
+//                unswer = MyCopy(0, indexKey, unswer) + keyShifr + MyCopy(indexKey, unswer.length(), unswer);
+//                KEY += indexKey + "2";
+//            }
+//            else {
+//                int indexKey = r.nextInt(unswer.length());
+//                unswer = MyCopy(0, indexKey, unswer) + keyShifr + MyCopy(indexKey, unswer.length(), unswer);
+//                KEY += indexKey + "2";
+//            }
+//            return new String[]{unswer, KEY};
+//        }
+//
+//        else {
+//            int keyShifrInt;
+//            char keyShifrChar;
+//            if (text.length() < 1)
+//                for (int i = 0; i < r.nextInt(((9 - 1) + 1)) + 1; i++)
+//                    text += get_Symbols().charAt(r.nextInt(get_Symbols().length()));
+//
+//            boolean lol1= false, lol2 = false;
+//            if (Character.isDigit(text.charAt(Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2))) % text.length()))) {
+//                keyShifrInt = Integer.parseInt(
+//                        String.valueOf(
+//                                text.charAt(
+//                                        Integer.parseInt(
+//                                                String.valueOf(
+//                                                        KEY.charAt(
+//                                                                KEY.length() - 2))) % text.length()
+//                                )
+//                        )
+//                );
+//                lol1 = true;
+//            }
+//            else {
+//                keyShifrChar = (
+//                        text.charAt(
+//                                Integer.parseInt(
+//                                        String.valueOf(
+//                                                KEY.charAt(
+//                                                        KEY.length() - 2))) % text.length()
+//                        )
+//                );
+//                lol2 = true;
+//            }
+//
+//            text = MyCopy(0,
+//                    Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2)))
+//                            + Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2))) + 1 , text);
+//
+//            if (text.length() < 1)
+//                for (int i = 0; i < r.nextInt(9 - 1 + 1) + 1; i++)
+//                    text += get_Symbols().charAt(r.nextInt(get_Symbols().length()));
+//
+//            char[] arrCh = text.toCharArray();
+//            int i = keyShifr;
+//
+//            if (i >= arrCh.length)
+//                i = keyShifr % arrCh.length; // чтобы не выйти за границы списка
+//
+//            while (i >= 0) {
+//                char tmpCh = arrCh[i];
+//                arrCh[i] = arrCh[(i + keyShifr) % text.length()];
+//                arrCh[(i + keyShifr) % text.length()] = tmpCh;
+//                i--;
+//            }
+//
+//            unswer = MyCopy(0 , arrCh.length, String.valueOf(arrCh));
+//            KEY = MyCopy(0, KEY.length() - 2, KEY);
+//            return new String[]{unswer, KEY};
+//        }
+//    }
 
     static private String[] Shifr_Cezarya(int choiceSHIFR, String text, String KEY){
         String unswer = "";
@@ -367,9 +357,13 @@ public class Main {
                 );
             }
 
-            text = MyCopy(0,
+            String tmpText = MyCopy(0,
                     Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2)))
-                            + Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2))) + 1 , text);
+                            , text);
+            tmpText += MyCopy(Integer.parseInt(String.valueOf(KEY.charAt(KEY.length() - 2))) + 1,
+                    text.length()
+                    , text);
+            text = tmpText; // wadawd
 
             int indexTMP;
             for (var i: text.toCharArray()) {
