@@ -1,3 +1,4 @@
+import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -6,45 +7,7 @@ public class Main {
     static private Scanner cin = new Scanner(System.in);
     static private Random r = new Random();
     public static void main(String[] args) {
-        do {
-            System.out.print("Зашифровать(1)/расшифровать(0): ");
-            int[] arrShifry = shuffleArray(new int[]{2, 3});
-            int choiceUser = cin.nextInt();
-            String zaglushka = cin.nextLine();
-            if (choiceUser == 1) {
-                System.out.println("Введите текст");
-                String KEY;
-                String str = cin.nextLine().replace(" ", "_");
-                // String[] text = Shifr_Vijenera(1, str, "");
-                String[] text = Shifr_Cezarya(1, str, "");
 
-                System.out.println("Зашифрованный текст:\n" + text[0] + "\nсекретный ключ: " + text[1]);
-
-                // 1) КЁД9ПЧХ{VBEIX]
-                // 2)
-                // 33
-            } else if (choiceUser == 0) {
-                teleport:
-                {
-                    System.out.println("Введите ключ: ");
-                    String KEY = cin.nextLine();
-                    for (int i = 0; i < KEY.length(); i++)
-                        if (!Character.isDigit(KEY.charAt(i))) {
-                            System.out.println("Ошибка, ключ указан не верно, попробуйте снова\n");
-                            break teleport;
-                        }
-
-                    System.out.println("Введите зашифрованный текст");
-                    String[] CipherText = {cin.nextLine(), KEY};
-                    CipherText = Shifr_Cezarya(2, CipherText[0], KEY);
-                    //  CipherText = Shifr_Vijenera(2, CipherText[0], CipherText[1]);
-                    System.out.println("Расшифрованный текст:\n" + CipherText[0]);
-                }
-            } else {
-                System.out.println("Ошибка, введите 1 ли 0");
-                String zaglushka2 = cin.nextLine();
-            }
-        } while (true);
     }
 
     static int[] shuffleArray(int[] ar)
@@ -105,6 +68,7 @@ public class Main {
     static private String[] Shifr_Vijenera(int choiceSHIFR, String text, String KEY){
         String unswer = "";
         text = text.toUpperCase();
+        KEY = KEY.toUpperCase();
 
         if (choiceSHIFR == 1){
             int k = 0;

@@ -1,57 +1,100 @@
 public class Cezar implements shifr {
-    private String text, KEY;
-    private int choiceShifr;
-
     @Override
-    public String[] crypt(int choiceShifr, String Text) {
+    public String[] crypt(int choiceShifr, String text, String KEY) {
         String unswer = "";
-        if (choiceShifr == 1){
-            System.out.println("Введите ключ: ");
-            int indexTMP,keyShifr;
-            while (true) {
-                String keyShifrTmp = cin.nextLine();
-                try {
-                    keyShifr = Integer.parseInt(keyShifrTmp);
-                    if (keyShifr < 1){
-                        System.out.print("Ошибка, введите положительное целое число: ");
-                        continue;
-                    }
-                    break;
-                } catch (Exception ignored) {
-                    System.out.print("Ошибка, введите положительное целое число: ");
-                }
+        int pos, shifrKey = Integer.parseInt(KEY);
+        char[] arrText = text.replace(" ", "_").toUpperCase().toCharArray();
+        if (choiceShifr == 1) {
+            for (var i : arrText) {
+                if (RU().contains(String.valueOf(i))) {
+                    pos = RU().indexOf(String.valueOf(i));
+                    unswer += RU().charAt(Math.abs(pos + shifrKey) % RU().length());
+                } else if (EN().contains(String.valueOf(i))) {
+                    pos = EN().indexOf(String.valueOf(i));
+                    unswer += EN().charAt(Math.abs(pos + shifrKey) % EN().length());
+                } else if (SIM().contains(String.valueOf(i))) {
+                    pos = SIM().indexOf(String.valueOf(i));
+                    unswer += SIM().charAt(Math.abs(pos + shifrKey) % SIM().length());
+                } else
+                    System.out.println("Error Cypher Cezar");
             }
-            for (var i: text.toCharArray()) {
-                if(get_Russian_Alphabet().contains(String.valueOf(i))){
-                    indexTMP = get_Russian_Alphabet().indexOf(String.valueOf(i));
-                    unswer += get_Russian_Alphabet().charAt(Math.abs(indexTMP + keyShifr) % get_Russian_Alphabet().length());
-                }
-                else if(get_English_Alphabet().contains(String.valueOf(i))){
-                    indexTMP = get_English_Alphabet().indexOf(String.valueOf(i));
-                    unswer += get_English_Alphabet().charAt(Math.abs(indexTMP + keyShifr) % get_English_Alphabet().length());
-                }
-                else if(get_Symbols().contains(String.valueOf(i))){
-                    indexTMP = get_Symbols().indexOf(String.valueOf(i));
-                    unswer += get_Symbols().charAt(Math.abs(indexTMP + keyShifr) % get_Symbols().length());
-                }
-                else
-                    System.out.println("Error");
-            }
-
-            int indexKey;
-            if (unswer.length() >= 9){
-                indexKey = r.nextInt(10);
-                unswer = MyCopy(0, indexKey, unswer) + keyShifr + MyCopy(indexKey, unswer.length(), unswer);
-                KEY += indexKey + "3";
-            }
-            else{
-                indexKey = r.nextInt(unswer.length());
-                unswer = MyCopy(0, indexKey, unswer) + keyShifr + MyCopy(indexKey, unswer.length(), unswer);
-                KEY += indexKey + "3";
-            }
-            return new String[]{unswer, KEY};
         }
+        else {
+            for (var i : arrText) {
+                if (RU().contains(String.valueOf(i))) {
+                    pos = RU().indexOf(String.valueOf(i)) - shifrKey;
+                    if (-pos > RU().length())
+                        pos = RU().length() - (-pos % RU().length());
+                    if (pos < 0)
+                        pos = RU().length() + pos;
+                    unswer += RU().charAt(pos % RU().length());
 
-        return null;
+                } else if (EN().contains(String.valueOf(i))) {
+                    pos = EN().indexOf(String.valueOf(i)) - shifrKey;
+                    if (-pos > EN().length())
+                        pos = EN().length() - (-pos % EN().length());
+                    if (pos < 0)
+                        pos = EN().length() + pos;
+                    unswer += EN().charAt(pos % EN().length());
+
+                } else if (SIM().contains(String.valueOf(i))) {
+                    pos = SIM().indexOf(String.valueOf(i)) - shifrKey;
+                    if (-pos > SIM().length())
+                        pos = SIM().length() - (-pos % SIM().length());
+                    if (pos < 0)
+                        pos = SIM().length() + pos;
+                    unswer += SIM().charAt(pos % SIM().length());
+                } else
+                    System.out.println("Error DeCypher Cezar");
+            }
+        }
+        return new String[]{unswer, KEY};
+    }
+
+    public static void main(String[] args) {
+        Cezar cypher = new Cezar();
+        int choiceShifr;
+        while (true)
+            try {
+                System.out.print("Зашифровать(1)/расшифровать(0): ");
+                String choiceShifrIn = cin.nextLine();
+                choiceShifr = Integer.parseInt(choiceShifrIn);
+                if (choiceShifr < 0 || choiceShifr > 1) {
+                    System.out.println("Ошибка, введите 1 или 0");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Ошибка, введите 1 или 0");
+            }
+
+        String KEY;
+        while (true) {
+            boolean lolOk = true;
+            try {
+                System.out.print("Введите ключ: ");
+                KEY = cin.nextLine();
+                for (var i : KEY.toCharArray())
+                    if (!Character.isDigit(i)) {
+                        System.out.println("Ошибка, положительное целое число");
+                        lolOk = false;
+                        break;
+                    }
+                if (lolOk)
+                    break;
+            } catch (Exception e) {
+                System.out.println("Ошибка, положительное целое число");
+            }
+        }
+        System.out.println("Введите текст");
+        String text = cin.nextLine();
+        String[] unswer = cypher.crypt(choiceShifr, text, KEY);
+        if (choiceShifr == 1)
+            System.out.println("Зашифрованный текст\n" +  unswer[0] +
+                    "\nКлюч от шифра: " + unswer[1]);
+        else
+            System.out.println("Расшированный текст\n" +  unswer[0] +
+                    "\nКлюч от шифра: " + unswer[1]);
+
     }
 }

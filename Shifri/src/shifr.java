@@ -4,17 +4,18 @@ import java.util.Scanner;
 public interface shifr {
     Scanner cin = new Scanner(System.in);
     Random r = new Random();
-    String[] crypt(int choiceShifr, String Text);
 
-    default String get_Russian_Alphabet(){
+    String[] crypt(int choiceShifr, String text, String KEY);
+
+    default String RU(){
         return "АЙКШДЛТЗЁЮЭЖЯБСХУВМОЕНЬЫФЩПГИЧЪЦР";
     }
 
-    default String get_English_Alphabet(){
+    default String EN(){
         return "QOUWIKCMRDBTVAGHJEXNFLYPZS";
     }
 
-    default String get_Symbols(){
+    default String SIM(){
         return "^№(3;${16<[=:9@?»/*),%'~.84\\\"!>+|&#50}]-«\\_27";
     }
 
