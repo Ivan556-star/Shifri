@@ -107,8 +107,6 @@ public class Vijenera implements shifr {
             System.out.println("Расшированный текст\n" +  unswer[0] +
                     "\nКлюч от шифра\n" + unswer[1]);
 
-        // FRQ
-        // HELLO_WORLD!
     }
 
 
