@@ -61,6 +61,6 @@ public class Skitalo implements shifr {
             System.out.println("Зашифрованный текст\n" +  unswer[0]);
         else
             System.out.println("Расшированный текст\n" +  unswer[0]);
-
+//wad
     }
 }
